@@ -1,0 +1,41 @@
+import nltk
+nltk.downoad('stopwords')
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import PorterStemmer
+from nltk.stem.snowball import SnowballStemmer
+
+1. Стеммер Портера:
+
+text = '''To Sherlock Holmes she is always THE woman. I have seldom heard him mention her under any other name. In his eyes she eclipses and predominates the whole of her sex. It was not that he felt any emotion akin to love for Irene Adler. All emotions, and that one particularly, were abhorrent to his cold, precise but admirably balanced mind. He was, I take it, the most perfect reasoning and observing machine that the world has seen, but as a lover he would have placed himself in a false position. He never spoke of the softer passions, save with a gibe and a sneer.'''
+stemsPorter = []
+porter = PorterStemmer()
+for w in tokens:
+    a = w
+    w = porter.stem(w)
+    if w != "":
+        stemsPorter.append(w)
+print(stemsPorter)
+
+['To', 'sherlock', 'holm', 'she', 'is', 'alway', 'the', 'woman', '.', 'I', 'have', 'seldom', 'heard', 'him', 'mention', 'her', 'under', 'ani', 'other', 'name', '.', 'In', 'hi', 'eye', 'she', 'eclips', 'and', 'predomin', 'the', 'whole', 'of', 'her', 'sex', '.', 'It', 'wa', 'not', 'that', 'he', 'felt', 'ani', 'emot', 'akin', 'to', 'love', 'for', 'iren', 'adler', '.', 'all', 'emot', ',', 'and', 'that', 'one', 'particularli', ',', 'were', 'abhorr', 'to', 'hi', 'cold', ',', 'precis', 'but', 'admir', 'balanc', 'mind', '.', 'He', 'wa', ',', 'I', 'take', 'it', ',', 'the', 'most', 'perfect', 'reason', 'and', 'observ', 'machin', 'that', 'the', 'world', 'ha', 'seen', ',', 'but', 'as', 'a', 'lover', 'he', 'would', 'have', 'place', 'himself', 'in', 'a', 'fals', 'posit', '.', 'He', 'never', 'spoke', 'of', 'the', 'softer', 'passion', ',', 'save', 'with', 'a', 'gibe', 'and', 'a', 'sneer', '.']
+
+- стеммер принимает окончания 'es/s' за окончания множественного числа, отбрасывая их даже в тех случаях, когда они входят в основу (как, например, в словах 'Holmes'; 'was'; 'always')
+- последнюю букву 'y' он, согласно правилам образования некоторых словоформ, заменяет на 'i' даже в тех случаях, где это неуместно ('any' - 'ani')
+
+2. Snowball:
+
+text = '''Он говорил на том изысканном французском языке, на котором не только говорили, но и думали наши деды, и с теми, тихими, покровительственными интонациями, которые свойственны состаревшемуся в свете и при дворе значительному человеку. Он подошел к Анне Павловне, поцеловал ее руку, подставив ей свою надушенную и сияющую лысину, и покойно уселся на диване.'''
+tokens = word_tokenize(text)
+stems = []
+stemmer = SnowballStemmer("russian") 
+for token in tokens:
+     token = stemmer.stem(token)
+     if token != "":
+            stems.append(token)
+ 
+print(stems)
+
+['он', 'говор', 'на', 'том', 'изыска', 'французск', 'язык', ',', 'на', 'котор', 'не', 'тольк', 'говор', ',', 'но', 'и', 'дума', 'наш', 'дед', ',', 'и', 'с', 'тем', ',', 'тих', ',', 'покровительствен', 'интонац', ',', 'котор', 'свойствен', 'состаревш', 'в', 'свет', 'и', 'при', 'двор', 'значительн', 'человек', '.', 'он', 'подошел', 'к', 'ан', 'павловн', ',', 'поцелова', 'е', 'рук', ',', 'подстав', 'е', 'сво', 'надушен', 'и', 'сия', 'лысин', ',', 'и', 'покойн', 'усел', 'на', 'диван', '.']
+ 
+- не распознает имена собственные (в слове 'Анна' все имя является основой)
+- принцип работы совпадает с Портером, известные стеммеру окончания отсекаются, игнорируются выбивающиеся из правил случаи
